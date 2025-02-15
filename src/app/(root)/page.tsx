@@ -1,6 +1,7 @@
 "use client";
 import { useUser } from "@clerk/nextjs";
 import { usePaginatedQuery, useQuery } from "convex/react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { api } from "../../../convex/_generated/api";
@@ -20,6 +21,11 @@ import Image from "next/image";
 import Link from "next/link";
 import StarButton from "@/components/StarButton";
 import CodeBlock from "../profile/_components/CodeBlock";
+import EditorPanel from "./_components/EditorPanel";
+import OutputPanel from "./_components/OutputPanel";
+import LanguageSelector from "./_components/LanguageSelector";
+import RunButton from "./_components/RunButton";
+import ThemeSelector from "./_components/ThemeSelector";
 
 const TABS = [
   {
@@ -66,7 +72,15 @@ function ProfilePage() {
     if (executionStatus === "CanLoadMore") loadMore(5);
   };
 
-  if (!user && isLoaded) return router.push("/");
+  useEffect(() => {
+    if (!user && isLoaded) {
+      router.push("/");
+    }
+  }, [user, isLoaded, router]);
+  const userWithAccess = {
+    ...user,
+    hasAccess: true, // Set conditionally if needed
+  };
 
   return (
     <div className="min-h-screen bg-[#0a0a0f]">
@@ -84,7 +98,19 @@ function ProfilePage() {
         )}
 
         {(userStats === undefined || !isLoaded) && <ProfileHeaderSkeleton />}
+        {/* CODE EDITOR PANEL */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+          <div className="col-span-2 space-y-4">
+            <EditorPanel />
+            <RunButton />
+            <OutputPanel />
+          </div>
 
+          <div className="space-y-4">
+            <LanguageSelector hasAccess={userWithAccess.hasAccess} />
+            <ThemeSelector />
+          </div>
+        </div>
         {/* Main content */}
         <div
           className="bg-gradient-to-br from-[#12121a] to-[#1a1a2e] rounded-3xl shadow-2xl 

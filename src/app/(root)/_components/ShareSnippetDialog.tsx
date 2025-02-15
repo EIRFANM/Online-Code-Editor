@@ -1,6 +1,8 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import { useCodeEditorStore } from "@/store/useCodeEditorStore";
 import { useMutation } from "convex/react";
-import { useState } from "react";
 import { api } from "../../../../convex/_generated/api";
 import { X } from "lucide-react";
 import toast from "react-hot-toast";
@@ -11,19 +13,31 @@ function ShareSnippetDialog({ onClose }: { onClose: () => void }) {
   const { language, getCode } = useCodeEditorStore();
   const createSnippet = useMutation(api.snippets.createSnippet);
 
+  // Close dialog on Escape key press
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        onClose();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [onClose]);
+
+  // Handle snippet sharing
   const handleShare = async (e: React.FormEvent) => {
     e.preventDefault();
-
     setIsSharing(true);
 
     try {
       const code = getCode();
       await createSnippet({ title, language, code });
-      onClose();
-      setTitle("");
       toast.success("Snippet shared successfully");
+      setTitle("");
+      onClose();
     } catch (error) {
-      console.log("Error creating snippet:", error);
+      console.error("Error creating snippet:", error);
       toast.error("Error creating snippet");
     } finally {
       setIsSharing(false);
@@ -35,14 +49,20 @@ function ShareSnippetDialog({ onClose }: { onClose: () => void }) {
       <div className="bg-[#1e1e2e] rounded-lg p-6 w-full max-w-md">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-semibold text-white">Share Snippet</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-300">
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-gray-300"
+          >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         <form onSubmit={handleShare}>
           <div className="mb-4">
-            <label htmlFor="title" className="block text-sm font-medium text-gray-400 mb-2">
+            <label
+              htmlFor="title"
+              className="block text-sm font-medium text-gray-400 mb-2"
+            >
               Title
             </label>
             <input
@@ -50,7 +70,8 @@ function ShareSnippetDialog({ onClose }: { onClose: () => void }) {
               id="title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full px-3 py-2 bg-[#181825] border border-[#313244] rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 bg-[#181825] border border-[#313244] rounded-lg text-white 
+              focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Enter snippet title"
               required
             />
@@ -78,4 +99,5 @@ function ShareSnippetDialog({ onClose }: { onClose: () => void }) {
     </div>
   );
 }
+
 export default ShareSnippetDialog;
