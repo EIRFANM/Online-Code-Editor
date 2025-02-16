@@ -125,7 +125,7 @@ export default function EditorPanel() {
               beforeMount={defineMonacoThemes}
               onMount={(editor) => setEditor(editor)}
               options={{
-                minimap: { enabled: false },
+                minimap: { enabled: true },
                 fontSize,
                 automaticLayout: true,
                 scrollBeyondLastLine: false,

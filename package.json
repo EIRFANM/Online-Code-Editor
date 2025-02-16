@@ -11,6 +11,7 @@
   "dependencies": {
     "@clerk/nextjs": "^6.11.1",
     "@monaco-editor/react": "^4.7.0-rc.0",
+    "college_project": "file:",
     "convex": "^1.19.0",
     "framer-motion": "^12.4.2",
     "lucide-react": "^0.475.0",
