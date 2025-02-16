@@ -99,18 +99,17 @@ function ProfilePage() {
 
         {(userStats === undefined || !isLoaded) && <ProfileHeaderSkeleton />}
         {/* CODE EDITOR PANEL */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
-          <div className="col-span-2 space-y-4">
-            <EditorPanel />
-            <RunButton />
-            <OutputPanel />
-          </div>
 
-          <div className="space-y-4">
-            <LanguageSelector hasAccess={userWithAccess.hasAccess} />
-            <ThemeSelector />
-          </div>
-        </div>
+        <LanguageSelector hasAccess={userWithAccess.hasAccess} />
+
+        <ThemeSelector />
+
+        <EditorPanel />
+
+        <RunButton />
+
+        <OutputPanel />
+
         {/* Main content */}
         <div
           className="bg-gradient-to-br from-[#12121a] to-[#1a1a2e] rounded-3xl shadow-2xl 
