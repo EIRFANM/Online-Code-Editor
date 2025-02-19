@@ -16,7 +16,10 @@ async function Header() {
   const convexUser = await convex.query(api.users.getUser, {
     userId: user?.id || "",
   });
-
+const userWithAccess = {
+    ...user,
+    hasAccess: true, // Set conditionally if needed
+  };
   return (
     <div className="relative z-10">
       <div
@@ -75,7 +78,7 @@ async function Header() {
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-3">
             <ThemeSelector />
-            <LanguageSelector hasAccess={Boolean(convexUser?.isPro)} />
+            <LanguageSelector hasAccess={userWithAccess.hasAccess} />
           </div>
 
           {!convexUser?.isPro && (
