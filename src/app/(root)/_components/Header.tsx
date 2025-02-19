@@ -81,7 +81,7 @@ const userWithAccess = {
             <LanguageSelector hasAccess={userWithAccess.hasAccess} />
           </div>
 
-          {!convexUser?.isPro && (
+          {/*!convexUser?.isPro && (
             <Link
               href="/pricing"
               className="flex items-center gap-2 px-4 py-1.5 rounded-lg border border-amber-500/20 hover:border-amber-500/40 bg-gradient-to-r from-amber-500/10 
@@ -93,7 +93,7 @@ const userWithAccess = {
                 Pro
               </span>
             </Link>
-          )}
+          )*/}
 
           <SignedIn>
             <RunButton />
